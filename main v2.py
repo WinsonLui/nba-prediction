@@ -6,10 +6,13 @@ import requests
 
 
 
-#READ NBA
-years = list(range(2015,2023)) #2019 and 2020 season
+#Set the study period
+years = list(range(2015,2023)) #2015 and 2023 season
+
+#Create a url template
 url_start = 'https://www.basketball-reference.com/leagues/NBA_{}_games.html'
 
+#Retrieve html files from web
 for year in years:
     url = url_start.format(year)
     data = requests.get(url)
@@ -23,33 +26,23 @@ months_2021 = ['december','january','february','march','april','may','june','jul
 
 url_start = 'https://www.basketball-reference.com/leagues/{}.html'
 
+#Save each season & month's webpage
 for year in years:
     if year == 2020: 
-        for month in months_2020:
-            fill = 'NBA_' + year + '_games-' + month          
-            url = url_start.format(fill)
-            data = requests.get(url)
-            name = year + ' (' + month + ')'
-            with open("season_schedule/{}.html".format(name), "w+") as f:
-                f.write(data.text)
-    elif year == 2021: 
-        for month in months_2021:
-            fill = 'NBA_' + year + '_games-' + month          
-            url = url_start.format(fill)
-            data = requests.get(url)
-            name = year + ' (' + month + ')'
-            with open("season_schedule/{}.html".format(name), "w+") as f:
-                f.write(data.text)   
+        months_temp = months_2020
+    elif year == 2021:
+        months_temp = months_2021
     else:
-        for month in months:
-            fill = 'NBA_' + year + '_games-' + month          
-            url = url_start.format(fill)
-            data = requests.get(url)
-            name = year + ' (' + month + ')'
-            with open("season_schedule/{}.html".format(name), "w+") as f:
-                f.write(data.text)
+        months_temp = months
+    for month in months_temp:
+        fill = 'NBA_' + year + '_games-' + month          
+        url = url_start.format(fill)
+        data = requests.get(url)
+        name = year + ' (' + month + ')'
+        with open("season_schedule/{}.html".format(name), "w+") as f:
+            f.write(data.text)                
 
-  
+#Create an empty list for starting_date and ending_date
 starting_date = []
 ending_date = []
 
@@ -73,7 +66,6 @@ for year in years:
     first_date = season_schedule2020['Date'][0]
     first_date_form = pd.to_datetime(first_date).strftime('%Y%m%d' + '0')
     starting_date.append(first_date_form)
-
     season_schedule = pd.read_html(str(season_schedule_table))[0]
     first_date = season_schedule['Date'][0]
     first_date_form = pd.to_datetime(first_date)
