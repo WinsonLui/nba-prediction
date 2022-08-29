@@ -1,12 +1,12 @@
-#year, month, date, 0, TEAM
-#202110190MIL
-
-import pandas as pd
-from bs4 import BeautifulSoup
-import requests
-
 #READ NBA
 years = list(range(2015,2023)) #2019 and 2020 season
+url_start = 'https://www.basketball-reference.com/leagues/NBA_{}_games.html'
+
+for year in years:
+    url = url_start.format(year)
+    data = requests.get(url)
+    with open("season_schedule/{}.html".format(year), "w+") as f:
+        f.write(data.text)
 
 #Create a list of month names 
 months = ['october','november','december','january','february','march','april','may','june']
@@ -40,10 +40,53 @@ for year in years:
             name = year + ' (' + month + ')'
             with open("season_schedule/{}.html".format(name), "w+") as f:
                 f.write(data.text)
-        
-             
+
+  
 starting_date = []
 ending_date = []
+
+for year in years:
+    if year == 2020:
+        start_month = months_2020[0]
+        end_month = months_2020[-1]
+    elif year == 2021:
+        start_month = months_2021[0]
+        end_month = months_2021[-1]
+    else:
+        start_month = months[0]
+        end_month = months[-1]
+    start_name = year + ' (' + start_month + ')'
+    end_name = year + ' (' + end_month + ')'   
+    with open("season_schedule/{}.html".format(start_name)) as f:
+        page = f.read()
+    soup = BeautifulSoup(page, "html.parser")
+    season_schedule_table = soup.find(id="schedule")
+    season_schedule2020 = pd.read_html(str(season_schedule_table))[0]
+    first_date = season_schedule2020['Date'][0]
+    first_date_form = pd.to_datetime(first_date).strftime('%Y%m%d' + '0')
+    starting_date.append(first_date_form)
+
+    season_schedule = pd.read_html(str(season_schedule_table))[0]
+    first_date = season_schedule['Date'][0]
+    first_date_form = pd.to_datetime(first_date)
+    starting_date.append(first_date_form)          
+    with open("season_schedule/{}.html".format(end_name)) as f:
+        page = f.read()
+    soup = BeautifulSoup(page, "html.parser")
+    season_schedule_table = soup.find(id="schedule")
+    season_schedule = pd.read_html(str(season_schedule_table))[0]
+    last_date = season_schedule['Date'][-1]
+    last_date_form = pd.to_datetime(last_date)
+    ending_date.append(last_date_form) 
+
+print(starting_date)
+print(ending_date)
+               
+               
+ 
+
+
+
 
                
 game_schedule = pd.DataFrame(, columns = ['Season','Date','Home'])
