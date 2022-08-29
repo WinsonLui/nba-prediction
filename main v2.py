@@ -1,3 +1,11 @@
+#year, month, date, 0, TEAM
+#202110190MIL
+import pandas as pd
+from bs4 import BeautifulSoup
+import requests
+
+
+
 #READ NBA
 years = list(range(2015,2023)) #2019 and 2020 season
 url_start = 'https://www.basketball-reference.com/leagues/NBA_{}_games.html'
