@@ -16,7 +16,7 @@ months_2021 = ['december','january','february','march','april','may','june','jul
 url_start = 'https://www.basketball-reference.com/leagues/{}.html'
 
 for year in years:
-    if year = 2020: 
+    if year == 2020: 
         for month in months_2020:
             fill = 'NBA_' + year + '_games-' + month          
             url = url_start.format(fill)
@@ -24,7 +24,7 @@ for year in years:
             name = year + ' (' + month + ')'
             with open("season_schedule/{}.html".format(name), "w+") as f:
                 f.write(data.text)
-    elif year = 2021: 
+    elif year == 2021: 
         for month in months_2021:
             fill = 'NBA_' + year + '_games-' + month          
             url = url_start.format(fill)
@@ -49,9 +49,9 @@ ending_date = []
 game_schedule = pd.DataFrame(, columns = ['Season','Date','Home'])
                
 for year in years:
-    if year = 2020:
+    if year == 2020:
         months_temp = months_2020
-    elif year = 2021:
+    elif year == 2021:
         months_temp = months_2021
     else:
         months_temp = months
