@@ -35,7 +35,7 @@ def miss_shot(shot,play):
   
 
 #offensive/defensive rebound (e.g., offdef = Offensive, Defensive)
-def ofrb(off_def, play):
+def rebound(off_def, play):
   search = off_def + " rebound"
   if search in play:
     play = play.strip()
@@ -75,5 +75,11 @@ for shot in shots:
   pbp[make_shot] = pbp['all_play'].apply(lambda x: make_shot(shot,x))
   miss_shot = "misses " + shot
   pbp[miss_shot] = pbp['all_play'].apply(lambda x: miss_shot(shot,x))
+  
+pbp["offensive rebound"] = pbp['all_play'].apply(lambda x: rebound("Offensive",x))
+pbp["defensive rebound"] = pbp['all_play'].apply(lambda x: rebound("Defensive",x))
       
-      
+pbp["assist from"] = pbp['all_play'].apply(lambda x: assist("from",x))
+pbp["assist to"] = pbp['all_play'].apply(lambda x: assist("to",x))
+
+
