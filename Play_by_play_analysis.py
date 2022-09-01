@@ -62,6 +62,18 @@ def assist(from_to, play):
     else: return
   else: return
   
+  
+#Create a dataframe
+pbp = pbp_raw
 
+
+#Create a loop to fill in the dataframe
+shots = ["free throw","2-pt dunk","2-pt layup","2-pt hook shot","2-pt jump shot","3-pt jump shot"]
+
+for shot in shots:
+  make_shot = "makes " + shot
+  pbp[make_shot] = pbp['all_play'].apply(lambda x: make_shot(shot,x))
+  miss_shot = "misses " + shot
+  pbp[miss_shot] = pbp['all_play'].apply(lambda x: miss_shot(shot,x))
       
       
